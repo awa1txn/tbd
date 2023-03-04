@@ -70,6 +70,7 @@
     --callout-border-rgb: 108, 108, 108;
     --card-rgb: 100, 100, 100;
     --card-border-rgb: 200, 200, 200;
+    
   }
 }
 
@@ -100,8 +101,19 @@ a {
   text-decoration: none;
 }
 
+nav>ul>li>button>svg>path{
+  fill:white
+}
+nav>ul>li>button{
+  color:white !important
+}
+nav{
+  max-width: 500px;
+  justify-content: center;
+}
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
 }
+

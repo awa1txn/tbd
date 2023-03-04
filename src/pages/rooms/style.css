@@ -1,0 +1,13 @@
+
+path:hover{
+    fill:red
+  }
+path{
+  fill:black
+}
+main{
+  margin: 20px;
+  -webkit-box-shadow: -12px 11px 100px -49px rgba(0,0,0,0.75);
+  -moz-box-shadow: -12px 11px 100px -49px rgba(0,0,0,0.75);
+  box-shadow: -12px 11px 100px -49px rgba(0,0,0,0.75);
+}
