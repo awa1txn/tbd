@@ -1,13 +1,203 @@
-
-path:hover{
-    fill:red
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
   }
-path{
-  fill:black
-}
-main{
-  margin: 20px;
-  -webkit-box-shadow: -12px 11px 100px -49px rgba(0,0,0,0.75);
-  -moz-box-shadow: -12px 11px 100px -49px rgba(0,0,0,0.75);
-  box-shadow: -12px 11px 100px -49px rgba(0,0,0,0.75);
-}
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #000000; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #6b6b6b;
+    border-radius: 3px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b9b9b95e; 
+  }
+  .mainRoomBtn {
+    line-height: 50px;
+    height: 50px;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+  }
+  .mainRoomBtn-one {
+    color: #FFF;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .mainRoomBtn-one span {
+    transition: all 0.3s;
+  }
+  .mainRoomBtn-one::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    transition: all 0.3s;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-top-color: rgba(255,255,255,0.5);
+    border-bottom-color: rgba(255,255,255,0.5);
+    transform: scale(0.1, 1);
+  }
+  .mainRoomBtn-one:hover span {
+    letter-spacing: 2px;
+  }
+  .mainRoomBtn-one:hover::before {
+    opacity: 1; 
+    transform: scale(1, 1); 
+  }
+  .mainRoomBtn-one::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    transition: all 0.3s;
+    background-color: rgba(255,255,255,0.1);
+  }
+  .mainRoomBtn-one:hover::after {
+    opacity: 0; 
+    transform: scale(0.1, 1);
+  }
+  
+  .mainRoomPath:hover{
+      fill:gainsboro
+  }
+  .mainRoomPath{
+    fill:rgb(233, 209, 157);
+    stroke: black;
+    stroke-width: 0.2;
+  }
+  .mainRoomCircle{
+    stroke: black;
+    stroke-width: 0.1;
+  }
+  .mainRoomSidemenu{
+    position: absolute;
+    border-radius: 25px;
+    z-index: 1;
+    background-color: black;
+    width: 40vw;
+    height: 95vh;
+  }
+  .mainRoomSidemenu>div{
+    padding: 15px;
+  }
+  .mainRoomPlayerBar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    color:#FFF
+    }
+  .mainRoomMain{
+    display: flex;
+    overflow: hidden;
+    justify-content: flex-end;
+    margin: 20px;
+    width: 97vw;
+    height: 93vh;
+    border-radius: 25px;
+    -webkit-box-shadow: 2px 5px 59px 16px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 5px 59px 16px rgba(0,0,0,0.75);
+    box-shadow: 2px 5px 59px 16px rgba(0,0,0,0.75);
+    height: 95vh;
+    background:rgb(40, 137, 175);
+    z-index: -1;
+  }
+  .mainRoomSvg{
+    border-radius: 25px;
+  }
+  .mainRoomUpperButton{
+    position: absolute;
+    top:20px;
+    left:28px;
+    width: 200px;
+    height: 30px;
+    padding: 0px;
+  }
+  .mainRoomButton{
+    position: absolute;
+    text-align: center;
+    background: white;
+    -webkit-border-top-left-radius: 25px;
+    -moz-border-radius-topleft: 25px;
+    border-top-left-radius: 25px;
+    height: 30px;
+    width: 200px;
+    z-index: 2;
+  }
+  .mainRoomBookmark{
+    position: absolute;
+    width: 20px;
+    height: 60px;
+    top: 0px;
+    left: 165px;
+    z-index: 1;
+  }
+  .mainRoomBookmark:hover{
+    animation: markMove 1s infinite;
+  }
+  .mainRoomParentGrid {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 20vh 43vh 30vh;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+  .mainRoomMenuGrid {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    }
+  .mainRoomPlayerList {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior:smooth;
+  }
+  .mainRoomPlayerList>img{
+    margin: 0px 5px;
+    border-radius: 100%;
+    width: 100%;
+    height: 100%;
+  }
+  .mainRoomPlayerData{
+    display: flex;
+    flex-direction: column;
+  }
+  .mainRoomPlayerData>img{
+    width: 66.7%;
+    height: 60%;
+  }
+  .mainRoomPlayerName{
+    padding: 5px;
+    width: 70%;
+  }
+  .mainRoomPlayerFlag{
+    margin: 5px 0px;
+  }
+  .whiteText{
+    color:white
+  }
+  @keyframes markMove {
+    0%   {top: 0px;}
+    50%  {top: 10px;}
+    100% {top: 0px;}
+  }

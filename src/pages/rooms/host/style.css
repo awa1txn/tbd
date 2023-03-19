@@ -1,0 +1,76 @@
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #000000; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #6b6b6b;
+    border-radius: 3px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b9b9b95e; 
+  }
+  
+  .hostRoomPath:hover{
+      fill:gainsboro
+  }
+  .hostRoomPath{
+    fill:rgb(233, 209, 157);
+    stroke: black;
+    stroke-width: 0.2;
+  }
+  circle{
+    stroke: black;
+    stroke-width: 0.1;
+  }
+  .hostRoomMain{
+    display: flex;
+    overflow: hidden;
+    justify-content: flex-end;
+    margin: 20px;
+    width: 97vw;
+    height: 93vh;
+    border-radius: 25px;
+    -webkit-box-shadow: 2px 5px 59px 16px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 5px 59px 16px rgba(0,0,0,0.75);
+    box-shadow: 2px 5px 59px 16px rgba(0,0,0,0.75);
+    height: 95vh;
+    background:rgb(40, 137, 175);
+    z-index: -1;
+  }
+  .hostRoomSvg{
+    border-radius: 25px;
+  }
+  .hostRoomUpperPanel{
+    position: absolute;
+    top:20px;
+    left:28px;
+    height: 30px;
+    padding: 0px;
+  }
+  .hostRoomButton{
+    position: absolute;
+    text-align: center;
+    background: white;
+    -webkit-border-top-left-radius: 25px 25px;
+    -moz-border-radius-topleft: 25px 25px;
+    border-top-left-radius: 25px 25px;
+    height: 30px;
+    width: 200px;
+    z-index: 2;
+  }
+  .bookmark:hover{
+    animation: markMove 1s infinite;
+  }
+  .whiteText{
+    color:white
+  }
+  

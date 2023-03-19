@@ -29,9 +29,16 @@ const nextConfig = {
         port: '',
         pathname: '/*',
       },
+      {
+        protocol: 'https',
+        hostname: 'loremflickr.com',
+        port: '',
+        pathname: '/*',
+      },
     ],
-    domains: ['cdn.discordapp.com','media.tenor.com','imgs.search.brave.com', 'www.w3schools.com'],
+    domains: ['cdn.discordapp.com','media.tenor.com','imgs.search.brave.com', 'www.w3schools.com', 'loremflickr.com'],
   },
+  reactStrictMode: false,
 }
 
 module.exports = nextConfig

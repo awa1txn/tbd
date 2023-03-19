@@ -116,4 +116,23 @@ nav{
     color-scheme: dark;
   }
 }
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+  background: #000000; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #6b6b6b;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b9b9b95e; 
+}
