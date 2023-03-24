@@ -58,22 +58,52 @@ const Room = () => {
 
     }
 
-    svg.on("mouseover", () => {
+    let isPainting = false;
+
+    svg.on("mousedown", () => {
+      isPainting = true;
+    })
+    svg.on("mouseup", () => {
+      isPainting = false;
+    })
+    svg.on('mousemove', (e) => {
+      if (!isPainting) {
+        return;
+      }
       let g = d3.select('g')
-      setCircle(g)
+      let xy = d3.pointer(event, g.node());
+
+      g.append("circle")
+        .attr('class', 'mainRoomCircle')
+        .attr("r", 0.7)
+        .attr("cx", xy[0])
+        .attr("cy", xy[1])
+        .attr("fill", "white");
     })
 
     const setCircle = (el: any) => {
-      el.on("click", () => {
+
+      el.on(``, () => {
         let g = d3.select('g')
         let xy = d3.pointer(event, el.node());
 
-        g.append("circle")
-          .attr('class', 'mainRoomCircle')
-          .attr("r", 0.7)
-          .attr("cx", xy[0])
-          .attr("cy", xy[1])
-          .attr("fill", "white");
+        g.append("svg:defs").append("svg:marker")
+          .attr("id", "triangle")
+          .attr("refX", xy[0])
+          .attr("refY", xy[1])
+          .attr("markerWidth", 6)
+          .attr("markerHeight", 6)
+          .attr("orient", "auto")
+          .append("path")
+          .attr("d", "M 0 -5 10 10")
+          .style("stroke", "black");
+
+        // g.append("circle")
+        //   .attr('class', 'mainRoomCircle')
+        //   .attr("r", 0.7)
+        //   .attr("cx", xy[0])
+        //   .attr("cy", xy[1])
+        //   .attr("fill", "white");
       })
     }
     // REQUEST DATA
@@ -84,7 +114,8 @@ const Room = () => {
             id === 'kazakhstan' ? 'http://localhost:3000/maps/kz.geojson' :
               id === 'italy' ? 'http://localhost:3000/maps/italy.json' :
                 id === 'ukraine' ? 'http://localhost:3000/maps/ukr.geojson' :
-                  'http://localhost:3000/maps/countries.geojson'
+                  id === 'ruskazakukr' ? 'http://localhost:3000/maps/ruskazakukr.geojson' :
+                    'http://localhost:3000/maps/countries.geojson'
         }`)
         .then(function (json) {
           update(json);

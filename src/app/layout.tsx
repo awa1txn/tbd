@@ -4,38 +4,17 @@ import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { getSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import React, { createContext, useContext, useState } from 'react';
+import React from 'react';
 import { ColorRing } from 'react-loader-spinner';
 import './globals.css'
 import { usePathname, useRouter } from 'next/navigation';
 import HomeIcon from '@mui/icons-material/Home';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import { AuthContext, useAuthContext } from '@/services/contexts/auth/authContext';
+import { UserData } from '@/services/contexts/auth/authContext';
 
-type User = {
-  email: string,
-  image: string,
-  name: string
-}
-type UserData = {
-  expires: any,
-  user: {
-    [key: string]: User
-  }
-}
 
-type AuthType = {
-  userData: UserData
-  setUserData: (userData: UserData) => void
-}
-
-const AuthContext = createContext<AuthType>({
-  userData: { expires: '', user: {} },
-  setUserData: () => { }
-})
-
-export function useAuthContext() {
-  return useContext(AuthContext)
-}
+//MAKE USER AUtH FOR AWS DB WItH ID MAIL ROLE timestamps
 
 function Header() {
   // shows user path (inner pages) /join e.g.
@@ -48,7 +27,6 @@ function Header() {
   const mainPath = path === '/'
   const joinPath = path === '/join'
   const privatePath = path === '/join/private'
-
   //functions
   // function UserSign(data: UserData): void {
   //   fetch('http://localhost:3000/api/auth/sign',
@@ -136,13 +114,62 @@ function Header() {
   </>
 }
 
+function Splashscreen() {
+  React.useEffect(() => {
+    setTimeout(() => {
+      document.getElementById('globalLoader')?.setAttribute('style', `
+      position: fixed;
+      z-index: 9999;
+      top: 50%;
+      left: 50%;
+      background-color: #000;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      animation: splashscreen 1s;
+      flex-direction: column-reverse`)
+      setTimeout(() => {
+        if (typeof window !== 'undefined') {
+          const loader = document.getElementById('globalLoader');
+          if (loader)
+            loader.remove();
+        }
+      }, 900);
+    }, 2000);
+  }, []);
+  return <>
+    <div id='globalLoader' style={{
+      position: 'fixed',
+      zIndex: 9999,
+      top: "50%",
+      left: "50%",
+      background: '#000',
+      transform: 'translate(-50%, -50%)',
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: 'column-reverse'
+    }}>
+      <img src="https://cdn.discordapp.com/attachments/941380040195715132/991438405445615747/IMG_20220628_232153.jpg" height={'70%'} alt="" />
+      <p>made by Sexmachine</p>
+    </div>
+  </>
+}
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode,
 }) {
-  const [userData, setUserData] = React.useState<UserData>({ expires: '', user: {} })
-  const router = useRouter();
+  const path = usePathname();
+  const isHome = path === '/';
+  const [userData, setUserData] = React.useState<UserData>(null)
+  const [isLoading, setIsLoading] = React.useState(isHome)
   //useEffects
   React.useEffect(() => {
     //functions gets data of user session and sets to state
@@ -151,7 +178,12 @@ export default function RootLayout({
       // UserSign(session)
       setUserData(session)
     })()
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 4000);
   }, [])
+
+
   return (
     <html lang="en">
       {/*
@@ -161,6 +193,7 @@ export default function RootLayout({
       <head />
       <body>
         <AuthContext.Provider value={{ userData, setUserData }}>
+          <Splashscreen />
           <Header />
           {children}
         </AuthContext.Provider>

@@ -136,3 +136,7 @@ nav{
 ::-webkit-scrollbar-thumb:hover {
   background: #b9b9b95e; 
 }
+@keyframes splashscreen {
+  from {opacity: 1}
+  to {opacity: 0}
+}

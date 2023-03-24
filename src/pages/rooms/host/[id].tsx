@@ -12,7 +12,6 @@ const Room = () => {
     let svg = d3.select(ref.current);
     const router = useRouter();
     const { id } = router.query;
-
     React.useEffect(() => {
         function handleZoom(e: { transform: string | number | boolean | readonly (string | number)[] | d3.ValueFn<d3.BaseType, unknown, string | number | boolean | readonly (string | number)[] | null> | null; }) {
             d3.select('svg g')
@@ -66,7 +65,8 @@ const Room = () => {
                         id === 'kazakhstan' ? 'http://localhost:3000/maps/kz.geojson' :
                             id === 'italy' ? 'http://localhost:3000/maps/italy.json' :
                                 id === 'ukraine' ? 'http://localhost:3000/maps/ukr.geojson' :
-                                    'http://localhost:3000/maps/countries.geojson'
+                                    id === 'ruskazakukr' ? 'http://localhost:3000/maps/ruskazakukr.geojson' :
+                                        'http://localhost:3000/maps/countries.geojson'
                 }`)
 
                 .then(function (json) {
@@ -122,7 +122,7 @@ const Room = () => {
     return (
         <>
             <Head>
-                <title>{id}</title>
+                <title>DYPLOMATICH | {id}</title>
             </Head>
             <div className="hostRoomUpperPanel">
                 <div className="hostRoomButton">

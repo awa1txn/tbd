@@ -1,22 +1,10 @@
 "use client";
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import HomeIcon from '@mui/icons-material/Home';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import { AppBar, Avatar, Badge, Box, IconButton, Toolbar, Typography } from '@mui/material';
-import Link from 'next/link';
-import useAuthContext from '../layout'
-import { getSession } from 'next-auth/react';
-import { resolve } from 'path';
 import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/services/contexts/auth/authContext'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -66,8 +54,15 @@ type UserData = {
 }
 
 export default function Page() {
+  // const router = useRouter()
+  // const AuthContext = useAuthContext().userData.user
+  // const isAuth = Object.keys(AuthContext).length != 0
+  // if (!isAuth) {
+  //   router.push('/')
+  // }
+
   return (<>
-    <TableContainer component={Paper} sx={{ background: 'black' }}>
+    {/* <TableContainer component={Paper} sx={{ background: 'black' }}>
       <Table sx={{ width: 700, margin: '0 auto', background: 'white' }} aria-label="customized table">
         <TableHead>
           <TableRow>
@@ -84,7 +79,8 @@ export default function Page() {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </TableContainer> */}
+    Bro we have some work to do. Wait for it! If you need to check previous games, watch for existing links.
   </>
   );
 }

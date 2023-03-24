@@ -4,6 +4,9 @@ import { Inter } from '@next/font/google'
 import React from 'react';
 import { createTheme } from '@mui/material/styles';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
+import { session } from '../pages/api/auth/[...nextauth]'
+import axios from 'axios'
+import cookies from 'next-cookies'
 //import { signIn, signOut, getSession, useSession } from "next-auth/react"
 
 const inter = Inter({ subsets: ['latin'] })
@@ -25,13 +28,7 @@ const theme = createTheme({
 });
 
 
-// async function getData(){
-//   return await (await fetch('https://jsonplaceholder.typicode.com/users/1')).json()
-// }
-
-
 export default function Home() {
-  // const hello = use(getData())
   return (
     <main>
       {/* hero content */}
@@ -47,7 +44,7 @@ export default function Home() {
       <div className={style.gridContainer}>
         <TwitterTimelineEmbed
           sourceType="profile"
-          screenName="saurabhnemade"
+          screenName="elonmusk"
           options={{ height: 2400, width: 900 }}
         />
       </div>
