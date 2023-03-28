@@ -6,12 +6,15 @@ import Link from "next/link";
 import Image from 'next/image'
 import { width } from "@mui/system";
 import './style.css'
+import { AuthContext, useAuthContext, UserData } from "@/services/contexts/auth/authContext";
+import { getSession } from "next-auth/react";
 
 const Room = () => {
   const ref = React.useRef(null);
   let svg = d3.select(ref.current);
   const router = useRouter();
   const { id } = router.query;
+  const [userData, setUserData] = React.useState<UserData>(null)
 
   React.useEffect(() => {
     function handleZoom(e: { transform: string | number | boolean | readonly (string | number)[] | d3.ValueFn<d3.BaseType, unknown, string | number | boolean | readonly (string | number)[] | null> | null; }) {
@@ -108,14 +111,8 @@ const Room = () => {
     }
     // REQUEST DATA
     if (router.isReady) {
-      d3.json(`${id === 'spain' ? 'https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/spain-provinces.geojson' :
-        id === 'africa' ? 'https://assets.codepen.io/2814973/africa.json' :
-          id === 'france' ? 'https://france-geojson.gregoiredavid.fr/repo/regions.geojson' :
-            id === 'kazakhstan' ? 'http://localhost:3000/maps/kz.geojson' :
-              id === 'italy' ? 'http://localhost:3000/maps/italy.json' :
-                id === 'ukraine' ? 'http://localhost:3000/maps/ukr.geojson' :
-                  id === 'ruskazakukr' ? 'http://localhost:3000/maps/ruskazakukr.geojson' :
-                    'http://localhost:3000/maps/countries.geojson'
+      d3.json(`${!!id ? `http://localhost:3000/maps/${id}.geojson` :
+        'http://localhost:3000/maps/countries.geojson'
         }`)
         .then(function (json) {
           update(json);
@@ -125,75 +122,86 @@ const Room = () => {
         });
     }
   }, [router.isReady])
+  React.useEffect(() => {
+    //functions gets data of user session and sets to state
+    (async function UserSession() {
+      const session: any = await getSession();
+      // UserSign(session)
+      setUserData(session)
+    })()
+  }, [])
 
-
+  if (!!userData) {
+    console.log(userData)
+  }
   return (
     <>
-      <div className="mainRoomUpperButton">
-        <div className="mainRoomButton">Тестовий інтерфейс</div>
-      </div>
-      <main className="mainRoomMain" ref={ref}>
-        <div className="mainRoomSidemenu">
-          <div className="mainRoomParentGrid">
-            <div className="mainRoomPlayerList">
-              <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
-              <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
-              <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
-              <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
-              <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
-              <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
-              <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
-              <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
-              <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
-              <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
-            </div>
-            <div className="mainRoomMenuGrid">
-              <div>
-                <div className="box-1">
-                  <div className="mainRoomBtn mainRoomBtn-one">
-                    <span>Армія</span>
-                  </div>
-                </div>
-                <div className="box-1">
-                  <div className="mainRoomBtn mainRoomBtn-one">
-                    <span>Гроші</span>
-                  </div>
-                </div>
-                <div className="box-1">
-                  <div className="mainRoomBtn mainRoomBtn-one">
-                    <span>Їжа</span>
-                  </div>
-                </div>
-                <div className="box-1">
-                  <div className="mainRoomBtn mainRoomBtn-one">
-                    <span>Загальний чат</span>
-                  </div>
-                </div>
-                <div className="box-1">
-                  <a href="http://localhost:3000">
+      <AuthContext.Provider value={{ userData, setUserData }}>
+        <div className="mainRoomUpperButton">
+          <div className="mainRoomButton">Тестовий інтерфейс</div>
+        </div>
+        <main className="mainRoomMain" ref={ref}>
+          <div className="mainRoomSidemenu">
+            <div className="mainRoomParentGrid">
+              <div className="mainRoomPlayerList">
+                <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
+                <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
+                <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
+                <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
+                <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
+                <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
+                <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
+                <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
+                <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
+                <Image src={"http://loremflickr.com/320/240"} width={200} height={160} alt="" />
+              </div>
+              <div className="mainRoomMenuGrid">
+                <div>
+                  <div className="box-1">
                     <div className="mainRoomBtn mainRoomBtn-one">
-                      <span>На головну</span>
+                      <span>Армія</span>
                     </div>
-                  </a>
+                  </div>
+                  <div className="box-1">
+                    <div className="mainRoomBtn mainRoomBtn-one">
+                      <span>Гроші</span>
+                    </div>
+                  </div>
+                  <div className="box-1">
+                    <div className="mainRoomBtn mainRoomBtn-one">
+                      <span>Їжа</span>
+                    </div>
+                  </div>
+                  <div className="box-1">
+                    <div className="mainRoomBtn mainRoomBtn-one">
+                      <span>Загальний чат</span>
+                    </div>
+                  </div>
+                  <div className="box-1">
+                    <a href="http://localhost:3000">
+                      <div className="mainRoomBtn mainRoomBtn-one">
+                        <span>На головну</span>
+                      </div>
+                    </a>
+                  </div>
                 </div>
+                <div className="whiteText">SHIFT+SCROLL щоб скролити горизонтально коли навелись на гравців</div>
               </div>
-              <div className="whiteText">SHIFT+SCROLL щоб скролити горизонтально коли навелись на гравців</div>
-            </div>
-            <div className="mainRoomPlayerBar">
-              <div className="mainRoomPlayerData">
-                <Image className="mainRoomPlayerFlag" src="https://cdn.discordapp.com/attachments/1037018735392870460/1037782073840246794/800px-Flag_of_the_Peoples_Republic_of_China.svg_.jpg" width={200} height={200} style={{ width: '66.7%', height: '60%' }} quality='75' alt="" ></Image>
-                <div className="mainRoomPlayerName">
-                  П*здатийНікнейм2008
+              <div className="mainRoomPlayerBar">
+                <div className="mainRoomPlayerData">
+                  <Image className="mainRoomPlayerFlag" src="https://cdn.discordapp.com/attachments/1037018735392870460/1037782073840246794/800px-Flag_of_the_Peoples_Republic_of_China.svg_.jpg" width={200} height={200} style={{ width: '66.7%', height: '60%' }} quality='75' alt="" ></Image>
+                  <div className="mainRoomPlayerName">
+                    П*здатийНікнейм2008
+                  </div>
                 </div>
-              </div>
-              <div>
-                <Image src="https://loremflickr.com/320/240" width={200} height={200} style={{ width: '100%', height: '95%' }} quality='75' alt="" />
+                <div>
+                  <Image src="https://loremflickr.com/320/240" width={200} height={200} style={{ width: '100%', height: '95%' }} quality='75' alt="" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </main>
-
+        </main>
+      </AuthContext.Provider>
     </>
   );
 };

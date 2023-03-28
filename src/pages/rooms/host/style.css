@@ -54,17 +54,21 @@
     top:20px;
     left:28px;
     height: 30px;
+    width: 30%;
     padding: 0px;
   }
   .hostRoomButton{
     position: absolute;
-    text-align: center;
+    padding: 10px;
     background: white;
-    -webkit-border-top-left-radius: 25px 25px;
-    -moz-border-radius-topleft: 25px 25px;
-    border-top-left-radius: 25px 25px;
+    -webkit-border-top-left-radius: 25px;
+    -moz-border-radius-topleft: 25px;
+    -webkit-border-bottom-right-radius: 25px;
+    -moz-border-radius-bottomright: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-right-radius: 25px;
     height: 30px;
-    width: 200px;
+    width: 100%;
     z-index: 2;
   }
   .bookmark:hover{

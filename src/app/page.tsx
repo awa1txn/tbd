@@ -4,9 +4,6 @@ import { Inter } from '@next/font/google'
 import React from 'react';
 import { createTheme } from '@mui/material/styles';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
-import { session } from '../pages/api/auth/[...nextauth]'
-import axios from 'axios'
-import cookies from 'next-cookies'
 //import { signIn, signOut, getSession, useSession } from "next-auth/react"
 
 const inter = Inter({ subsets: ['latin'] })

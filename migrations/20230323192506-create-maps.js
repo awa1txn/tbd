@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       isArchive: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.INTEGER
       },
       maps: {
         type: Sequelize.ARRAY(Sequelize.STRING)

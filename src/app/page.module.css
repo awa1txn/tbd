@@ -12,7 +12,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 900px;
+  height: 100svh;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
    -khtml-user-select: none; /* Konqueror HTML */
@@ -39,8 +39,6 @@
 }
 .gridBlock{
   width:1024px;
-  display:grid;
-  grid-template-columns: 682.5984px 341.2992px;
 }
 .flexNews{
   display:flex;
@@ -52,7 +50,7 @@
   width: 100%;
 }
 .hostMainMenu{
-  width: 300px;
+  width: 260px;
   height: 500px;
 }
 /* .flexEvents{

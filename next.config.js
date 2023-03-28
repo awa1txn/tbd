@@ -4,6 +4,7 @@ const nextConfig = {
     appDir: true,
   },
   images: {
+    disableStaticImages: true,
     remotePatterns: [
       {
         protocol: 'https',

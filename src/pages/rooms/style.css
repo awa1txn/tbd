@@ -84,7 +84,7 @@
   }
   .mainRoomCircle{
     stroke: black;
-    stroke-width: 0.1;
+    stroke-width: 0;
   }
   .mainRoomSidemenu{
     position: absolute;

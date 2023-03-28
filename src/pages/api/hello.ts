@@ -9,5 +9,5 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ message: 'Ти чо тіпа дофіга умний чи шо? Знайшовся тут мамкін хакер блє' })
+  res.status(200).json({ message: 'Ти чо тіпа дофіга умний чи шо? Знайшовся тут мамкін хакер блє/n пішов геть з цієї сторінки' })
 }

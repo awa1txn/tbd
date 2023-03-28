@@ -17,6 +17,7 @@ import React from 'react';
 import { Avatar, Badge, Input } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import HomeIcon from '@mui/icons-material/Home';
+import { useRouter } from 'next/navigation';
 
 
 const theme = createTheme({
@@ -35,28 +36,11 @@ const theme = createTheme({
   },
 });
 
-function SignIn() {
-  let [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
-
-  return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
-        <div>
-          <FormControl sx={{ m: 1, width: '30ch' }} variant="filled">
-            <InputLabel htmlFor="outlined-adornment-password">Ключ гри</InputLabel>
-            <Input
-            />
-          </FormControl>
-        </div>
-      </Box>
-    </ThemeProvider>
-  )
-}
 export default function Page() {
+  const router = useRouter();
+  const [gameKey, setGameKey] = React.useState<string | null>(null);
+
+
   return <main>
     <div style={{
       display: 'flex',
@@ -65,13 +49,25 @@ export default function Page() {
       height: '500px',
       flexDirection: 'column'
     }}>
-      <SignIn />
-      <Button variant="contained" style={{
-        width: '20ch',
-        margin: '10px 0px'
-      }}
-
-      >Увійти</Button>
+      <ThemeProvider theme={theme}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
+          <div>
+            <FormControl sx={{ m: 1, width: '30ch' }} variant="filled">
+              <InputLabel htmlFor="outlined-adornment-password">Ключ гри</InputLabel>
+              <Input
+                onChange={(e) => { setGameKey(e.target.value) }}
+              />
+            </FormControl>
+          </div>
+        </Box>
+      </ThemeProvider>
+      <Link href={`http://localhost:3000/rooms/${gameKey}`}>
+        <Button variant="contained" style={{
+          width: '20ch',
+          margin: '10px 0px'
+        }}
+        >Увійти</Button>
+      </Link>
     </div>
   </main>
 }

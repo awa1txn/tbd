@@ -15,7 +15,7 @@ module.exports = {
     await queryInterface.bulkInsert('Maps', [{
       id: 0,
       battlefieldName: 'Перша світова капітулізація рф',
-      isArchive: false,
+      isArchive: 0,
       maps: ['abc','bcd','cde'],
       players: ['abc','bcd','cde'],
       createdAt: Sequelize.fn('NOW'),

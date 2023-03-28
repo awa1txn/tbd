@@ -80,7 +80,10 @@ export default function Page() {
         </TableBody>
       </Table>
     </TableContainer> */}
-    Bro we have some work to do. Wait for it! If you need to check previous games, watch for existing links.
+    <p style={{ width: '240px' }}>
+      Проект знаходиться у тестовому режимі, тому нажаль ви не можете приєднатись до існуючих ігор самі. Аби подивитись існуючі ігри, запитайте в когось код та приєднайтесь через меню приватниї ігор.
+    </p>
+
   </>
   );
 }

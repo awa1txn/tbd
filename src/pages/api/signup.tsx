@@ -38,58 +38,51 @@ import { Sequelize, Model, DataTypes } from 'sequelize'
 // const database = 'tbd01'
 // const password = 'test123'
 // const port = 5432
-const sequelize = new Sequelize('postgres://postgres:test123@127.0.0.1:5432/users')
+const sequelize = new Sequelize('postgres://tbddev:root@127.0.0.1:5432/Users')
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<IData>
 ) {
-//   console.log(req.body)
-//   const sequelize = new Sequelize(database, user, password, {
-//     host,
-//     port,
-//     dialect: 'postgres',
-//     logging: true
-//   })
-class User extends Model {}
+  //   console.log(req.body)
+  //   const sequelize = new Sequelize(database, user, password, {
+  //     host,
+  //     port,
+  //     dialect: 'postgres',
+  //     logging: true
+  //   })
+  class User extends Model { }
 
-User.init({
-  nickname: {
-    type: DataTypes.STRING,
-    unique: true,
-  },
-  password: {
-    type: DataTypes.STRING,
-  },
-  date: {
-    type: DataTypes.STRING,
+  User.init({
+    nickname: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+    },
+    date: {
+      type: DataTypes.STRING,
+    }
+  }, {
+    sequelize,
+    timestamps: true,
+    modelName: 'User'
+  })
+  //
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+
+
+    console.log(req.body)
+    const { nickname, password } = req.body;
+    const result = await User.create({ nickname, password });
+    const dada = await User.findAll();
+    console.log("All users:", JSON.stringify(dada, null, 2));
+
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
   }
-}, {
-  sequelize,
-  timestamps:true,
-  modelName: 'User'
-})
-//
-try {
-  // await sequelize.authenticate();
-  // console.log('Connection has been established successfully.');
-
-  
-  console.log(req.body)
-
-  let now = new Date();
-  let dd = String(now.getDate()).padStart(2, '0');
-  let mm = String(now.getMonth() + 1).padStart(2, '0');
-  let yyyy = now.getFullYear();
-  let date = mm + '-' + dd + '-' + yyyy;
-
-  const {nickname, password} = req.body;
-  const result = await User.create({nickname, password, date})
-  const dada = await User.findAll();
-  console.log("All users:", JSON.stringify(dada, null, 2));
-  
-} catch (error) {
-  console.error('Unable to connect to the database:', error);
-} 
-    res.status(200).json({ message: 'Get out bro.' })
+  res.status(200).json({ message: 'Get out bro.' })
 }
