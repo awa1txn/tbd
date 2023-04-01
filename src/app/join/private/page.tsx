@@ -61,7 +61,7 @@ export default function Page() {
           </div>
         </Box>
       </ThemeProvider>
-      <Link href={`http://localhost:3000/rooms/${gameKey}`}>
+      <Link href={`http://localhost:3000/rooms/${gameKey}`} passHref>
         <Button variant="contained" style={{
           width: '20ch',
           margin: '10px 0px'

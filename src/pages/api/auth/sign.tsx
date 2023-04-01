@@ -131,12 +131,12 @@ export default async function handler(
             .then(function (user: any) {
               // If a user was found, send a JSON response with the user's information
               if (typeof user === 'object' && user !== null && Object.keys(user).length !== 0) {
-                res.status(200).json(user);
+                return res.status(200).json(user);
               }
               // If no user was found, create a new user with the specified email and device, and send a JSON response with the new user's information
               else {
                 createUserDevice(requestBody).then(function (user: any) {
-                  res.status(200).json(user);
+                  return res.status(200).json(user);
                 });
               }
             });
@@ -144,7 +144,7 @@ export default async function handler(
         // If req.body is a number, find a user with the specified device
         else {
           findUserDevice(req.body).then(function (user: any) {
-            res.status(200).json(user);
+            return res.status(200).json(user);
           });
         }
       }
@@ -154,6 +154,7 @@ export default async function handler(
     // If there is an error, log the error message to the console
     catch (err) {
       console.error('Unable to connect to the database:', err);
+      return res.status(504).send({ message: "Method doesn't ok" });
     }
   }
 }

@@ -40,6 +40,7 @@ const nextConfig = {
     domains: ['cdn.discordapp.com','media.tenor.com','imgs.search.brave.com', 'www.w3schools.com', 'loremflickr.com'],
   },
   reactStrictMode: false,
+  skipMiddlewareUrlNormalize: true,
 }
 
 module.exports = nextConfig

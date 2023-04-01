@@ -11,10 +11,11 @@ import { getSession } from "next-auth/react";
 
 const Room = () => {
   const ref = React.useRef(null);
-  let svg = d3.select(ref.current);
+  const svg = d3.select(ref.current);
   const router = useRouter();
   const { id } = router.query;
   const [userData, setUserData] = React.useState<UserData>(null)
+  const [user, setUser] = React.useState({})
 
   React.useEffect(() => {
     function handleZoom(e: { transform: string | number | boolean | readonly (string | number)[] | d3.ValueFn<d3.BaseType, unknown, string | number | boolean | readonly (string | number)[] | null> | null; }) {
@@ -83,32 +84,6 @@ const Room = () => {
         .attr("cy", xy[1])
         .attr("fill", "white");
     })
-
-    const setCircle = (el: any) => {
-
-      el.on(``, () => {
-        let g = d3.select('g')
-        let xy = d3.pointer(event, el.node());
-
-        g.append("svg:defs").append("svg:marker")
-          .attr("id", "triangle")
-          .attr("refX", xy[0])
-          .attr("refY", xy[1])
-          .attr("markerWidth", 6)
-          .attr("markerHeight", 6)
-          .attr("orient", "auto")
-          .append("path")
-          .attr("d", "M 0 -5 10 10")
-          .style("stroke", "black");
-
-        // g.append("circle")
-        //   .attr('class', 'mainRoomCircle')
-        //   .attr("r", 0.7)
-        //   .attr("cx", xy[0])
-        //   .attr("cy", xy[1])
-        //   .attr("fill", "white");
-      })
-    }
     // REQUEST DATA
     if (router.isReady) {
       d3.json(`${!!id ? `http://localhost:3000/maps/${id}.geojson` :
@@ -129,11 +104,30 @@ const Room = () => {
       // UserSign(session)
       setUserData(session)
     })()
-  }, [])
+
+  }, []);
+
+  (async function user() {
+    const body: any = JSON.stringify(userData?.user);
+
+    const res = await fetch('http://localhost:3000/api/auth/sign',
+      {
+        method: "POST",
+        body
+      })
+      .then(function (response) {
+        return response.json()
+      })
+      .then(function (json) {
+        setUser(json)
+        setUserData(json)
+      })
+  })()
 
   if (!!userData) {
-    console.log(userData)
+    // console.log(userData)
   }
+
   return (
     <>
       <AuthContext.Provider value={{ userData, setUserData }}>

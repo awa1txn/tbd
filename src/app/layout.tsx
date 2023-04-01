@@ -7,64 +7,68 @@ import Link from 'next/link';
 import React from 'react';
 import { ColorRing } from 'react-loader-spinner';
 import './globals.css'
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import HomeIcon from '@mui/icons-material/Home';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { AuthContext, useAuthContext } from '@/services/contexts/auth/authContext';
 import { UserData } from '@/services/contexts/auth/authContext';
 import Image from 'next/image';
 
-
-//MAKE USER AUtH FOR AWS DB WItH ID MAIL ROLE timestamps
-
 function Header() {
-  // shows user path (inner pages) /join e.g.
-  // const pathName = window.location.pathname;
-  // console.log(window.location.pathname)
 
   //states
   const path = usePathname();
+  const router = useRouter()
   const userData = useAuthContext().userData
-  const mainPath = path === '/'
-  const joinPath = path === '/join'
-  const privatePath = path === '/join/private'
+  const mainPath = path === '/';
+  const joinPath = path === '/join';
+  const privatePath = path === '/join/private';
+  const hostPath = path === '/host'
+  const userPath = path?.startsWith('/user/')
 
   const [user, setUser] = React.useState<any>({});
 
-  // console.log(userData)
-  //function auth for user
-  if (!!userData && Object.keys(user).length === 0) {
-    // console.log(userData)
-    if (Object.keys(user).length === 0) {
-      (async function user() {
-        const body: any = JSON.stringify(userData.user);
+  React.useEffect(() => {
+    //function auth for user
+    if (!!userData && Object.keys(user).length === 0) {
+      // console.log(userData)
+      if (Object.keys(user).length === 0) {
+        (async function user() {
+          const body: any = JSON.stringify(userData.user);
 
-        const res = fetch('/api/auth/sign',
-          {
-            method: "POST",
-            body
-          })
-          .then(function (response) {
-            return response.json()
-          })
-          .then(function (json) {
-            console.log(json);
-            setUser(json)
-          })
-      })()
+          const res = await fetch('http://localhost:3000/api/auth/sign',
+            {
+              method: "POST",
+              cache: 'force-cache',
+              body
+            })
+            .then(function (response) {
+              return response.json()
+            })
+            .then(function (json) {
+              setUser(json)
+            })
+        })()
+      }
     }
-  }
-  //functions
-  // function UserSign(data: UserData): void {
-  //   fetch('http://localhost:3000/api/auth/sign',
-  //     {
-  //       method: 'POST',
-  //       headers: { 'Content': 'application/json' },
-  //       body: JSON.stringify(data)
-  //     }
-  //   )
-  // }
 
+    if (user.role < 1) {
+      //checks if user has role bigger than 1(moderator)
+      if (hostPath) {
+        //checks if user in the host path
+        router.push('/')
+      }
+    }
+
+    if (Object.keys(user).length === 0) {
+      //checks if user logged in
+      if (!userPath) {
+        router.push('/')
+      }
+    }
+  }, [router, userData, user, hostPath, userPath, privatePath])
+
+  // console.log(user)
   return <>
     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
       <AppBar position="static" style={{ background: 'black', maxWidth: '93vw' }}>
@@ -86,12 +90,13 @@ function Header() {
               {
                 user.role > 0 &&
                 <IconButton aria-label="cart">
-                  <Link href='/host'>
+                  <Link href='/host' passHref>
                     <AddBoxIcon color="inherit" style={{ color: 'white' }} />
                   </Link>
                 </IconButton>
               }
-              <Link href={`/user/${user.id}`}>
+              <Link href={user.id == undefined ? '/' : `/user/${user.id}`}>
+
                 {
                   Object.keys(userData.user).length === 0 &&
                   <ColorRing
@@ -112,7 +117,7 @@ function Header() {
               {
                 mainPath &&
                 <>
-                  <Link href='/join'>
+                  <Link href='/join' passHref>
                     <IconButton aria-label="cart">
                       <PlayCircleFilledIcon color="inherit" style={{ color: 'white' }} />
                     </IconButton>
@@ -122,7 +127,7 @@ function Header() {
               {
                 !mainPath &&
                 <>
-                  <Link href='/'>
+                  <Link href='/' passHref>
                     <IconButton aria-label="cart">
                       <HomeIcon color="inherit" style={{ color: 'white' }} />
                     </IconButton>

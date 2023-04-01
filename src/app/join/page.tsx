@@ -54,12 +54,6 @@ type UserData = {
 }
 
 export default function Page() {
-  // const router = useRouter()
-  // const AuthContext = useAuthContext().userData.user
-  // const isAuth = Object.keys(AuthContext).length != 0
-  // if (!isAuth) {
-  //   router.push('/')
-  // }
 
   return (<>
     {/* <TableContainer component={Paper} sx={{ background: 'black' }}>

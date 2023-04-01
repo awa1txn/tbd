@@ -12,17 +12,18 @@ import DomainAddIcon from '@mui/icons-material/DomainAdd'; // for TK
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'; // for unit/tk delete
 import EventNoteIcon from '@mui/icons-material/EventNote'; // for dev
 import ColorLensIcon from '@mui/icons-material/ColorLens'; // for colorize
+import DoneIcon from '@mui/icons-material/Done'; // for changes submit
 const Room = () => {
     const ref = React.useRef(null);
     const [placeMode, setPlaceMode] = useState('unit')
     const [isColorize, setIsColorize] = useState(true)
     const [palleteColor, setPalleteColor] = useState('')
-    let svg = d3.select(ref.current);
+    const svg = d3.select(ref.current);
     const router = useRouter();
     const { id } = router.query;
     React.useEffect(() => {
         function handleZoom(e: { transform: string | number | boolean | readonly (string | number)[] | d3.ValueFn<d3.BaseType, unknown, string | number | boolean | readonly (string | number)[] | null> | null; }) {
-            d3.select('svg g')
+            d3.select('svg.hostRoomSvg g')
                 .attr('transform', e.transform);
         }
 
@@ -47,6 +48,8 @@ const Room = () => {
             } else {
                 data = geojson.crs
             }
+
+            // d3.select(ref.current).html()
             let u = d3.select(ref.current)
                 .append('svg')
                 .attr('class', 'hostRoomSvg')
@@ -61,6 +64,8 @@ const Room = () => {
                 .append('path')
                 .attr('class', 'hostRoomPath')
                 .attr('d', geoGenerator);
+
+
             initZoom();
 
         }
@@ -78,7 +83,7 @@ const Room = () => {
                     console.log(document.querySelector('svg.hostRoomSvg'))
                 });
         }
-    }, [router.isReady])
+    }, [router.isReady, id])
     React.useEffect(() => {
         svg.on("mouseover", () => {
 
@@ -114,24 +119,24 @@ const Room = () => {
             }
             if (mode === 'colorize') {
                 el.on("click", () => {
-                    let pathSelected = document.querySelector('svg>g>path:hover');
+                    let pathSelected = document.querySelector('svg.hostRoomSvg>g>path:hover');
                     pathSelected?.setAttribute('style', `fill: ${palleteColor}`);
                     // console.log('checker', isColorize, palleteColor)
                 })
             }
             if (mode === 'delete') {
                 el.on("click", () => {
-                    let imageSelected = d3.selectAll('svg>g>image:hover');
+                    let imageSelected = d3.selectAll('svg.hostRoomSvg>g>image:hover');
                     imageSelected.remove();
                 })
             }
         }
-    }, [placeMode, palleteColor])
+    }, [placeMode, palleteColor, svg])
 
     return (
         <>
             <Head>
-                <title>DYPLOMATICH | {id}</title>
+                <title>DYPLOMATICH</title>
             </Head>
             <div className="hostRoomUpperPanel">
                 <div className="hostRoomButton">
@@ -140,10 +145,14 @@ const Room = () => {
                     <span onClick={() => { setPlaceMode('colorize') }}><ColorLensIcon /></span>
                     <span onClick={() => { setPlaceMode('delete') }}><DeleteForeverIcon /></span>
                     <span onClick={() => { setPlaceMode('null'); console.log(placeMode) }}><EventNoteIcon /></span>
+                    <span onClick={() => { setPlaceMode('submit'); }}><DoneIcon /></span>
                     <span>
                         {
-                            isColorize &&
-                            <input type="color" onChange={(e) => { setPalleteColor(e.target.value); console.log(e.target.value) }} />
+                            placeMode === 'colorize' ?
+                                <input type="color" onChange={(e) => { setPalleteColor(e.target.value); console.log(e.target.value) }} /> :
+                                placeMode === 'submit' ?
+                                    <span onClick={() => { console.log(document.querySelector('svg.hostRoomSvg')) }}><button>submit!</button></span> :
+                                    <span>lol</span>
                         }
                     </span>
                 </div>
