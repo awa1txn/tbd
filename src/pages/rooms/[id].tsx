@@ -8,6 +8,7 @@ import { width } from "@mui/system";
 import './style.css'
 import { AuthContext, useAuthContext, UserData } from "@/services/contexts/auth/authContext";
 import { getSession } from "next-auth/react";
+import * as turf from '@turf/turf'
 
 const Room = () => {
   const ref = React.useRef(null);
@@ -16,8 +17,103 @@ const Room = () => {
   const { id } = router.query;
   const [userData, setUserData] = React.useState<UserData>(null)
   const [user, setUser] = React.useState({})
+  const paths:any = []
+  
+  // Using the Fetch API to get GeoJSON data
+async function fetchGeoJsonData(url: string): Promise<any> {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch GeoJSON data. Status: ${response.status}`);
+    }
+
+    const geoJsonData = await response.json();
+    return geoJsonData;
+  } catch (error:any) {
+    console.error(error.message);
+    throw error;
+  }
+}
+
+function findClosestRegions(selectedRegion:any, pathArray:any) {
+  // Отримуємо центр обраного регіону
+  const selectedBoundingBox = selectedRegion.getBBox();
+  const selectedCenterX = selectedBoundingBox.x + selectedBoundingBox.width / 2;
+  const selectedCenterY = selectedBoundingBox.y + selectedBoundingBox.height / 2;
+
+  // Створюємо масив для зберігання найближчих регіонів
+  const closestRegions:any = [];
+
+  // Шукаємо найближчі регіони
+  pathArray.forEach((region:any) => {
+    if (region.element !== selectedRegion) {
+      const regionBoundingBox = region.element.getBBox();
+      const regionCenterX = regionBoundingBox.x + regionBoundingBox.width / 2;
+      const regionCenterY = regionBoundingBox.y + regionBoundingBox.height / 2;
+
+      // Розраховуємо відстань між центрами регіонів
+      const distance = Math.sqrt(
+        (selectedCenterX - regionCenterX) ** 2 +
+        (selectedCenterY - regionCenterY) ** 2
+      );
+
+      // Додаємо регіон до масиву, якщо відстань мала, можна налаштувати потрібну відстань
+      if (distance < 10) { // Наприклад, тут використовуємо відстань як поріг
+        closestRegions.push(region.element);
+        region.element.setAttribute('style', 'fill:red;')
+
+        // setTimeout(() => {
+        //   region.element.setAttribute('style', '')
+        // }, 1000);
+      }
+    }
+  });
+  console.log(closestRegions)
+  return closestRegions;
+}
+
+
+  // Функція, яку викликаємо при кліку на елемент path
+  function pathClickHandler(event:any) {
+    // Отримуємо посилання на елемент, який був натиснутий
+    const clickedPath = event.target;
+    console.log(clickedPath.getBBox())
+    
+    // Ваш код для обробки кліку на шлях (наприклад, ви можете вивести його id або виконати інші дії)
+    console.log('Клікнуто на регіон з id:', clickedPath.getAttribute('id'));
+    findClosestRegions(clickedPath, paths)
+    
+    // Example usage
+    const geoJsonUrl = 'http://localhost:3000/maps/test.geojson';
+    fetchGeoJsonData(geoJsonUrl)
+      .then((data) => {
+        // Handle the GeoJSON data
+        // console.log('GeoJSON Data:', data);
+        // for(let i = 0; i <= data.features.length; i++){
+        //   console.log(data.features[i].geometry.coordinates)
+        // }
+
+        console.log('selected geo')
+        console.log(data.features[clickedPath.getAttribute('id')].properties.NAME_1)
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error('Error:', error);
+      });
+
+    d3.select('g')
+      .append('svg')
+      .attr("x", clickedPath.getBBox().x + clickedPath.getBBox().width/2)
+      .attr("y", clickedPath.getBBox().y + clickedPath.getBBox().height/2)
+      .attr("height", 5)
+      .attr("width", 5)
+      .attr('transform', "rotate(45 50 50)")
+      .attr('xlink:src', 'https://www.reshot.com/preview-assets/icons/UCA8NGYZDJ/right-arrow-UCA8NGYZDJ.svg')
+  }
 
   React.useEffect(() => {
+
     function handleZoom(e: { transform: string | number | boolean | readonly (string | number)[] | d3.ValueFn<d3.BaseType, unknown, string | number | boolean | readonly (string | number)[] | null> | null; }) {
       d3.select('svg g')
         .attr('transform', e.transform);
@@ -62,28 +158,40 @@ const Room = () => {
 
     }
 
-    let isPainting = false;
+    svg.on('mouseover', ()=>{
+      d3.select('g').on('mouseover', ()=>{
+        const paths = document.querySelectorAll('svg path')
+        paths.forEach((path) => {
+          path.addEventListener('click', pathClickHandler);
+        });
+      })
 
-    svg.on("mousedown", () => {
-      isPainting = true;
     })
-    svg.on("mouseup", () => {
-      isPainting = false;
-    })
-    svg.on('mousemove', (e) => {
-      if (!isPainting) {
-        return;
-      }
-      let g = d3.select('g')
-      let xy = d3.pointer(event, g.node());
 
-      g.append("circle")
-        .attr('class', 'mainRoomCircle')
-        .attr("r", 0.7)
-        .attr("cx", xy[0])
-        .attr("cy", xy[1])
-        .attr("fill", "white");
-    })
+
+    // let isPainting = false;
+
+    // svg.on("mousedown", () => {
+    //   isPainting = true;
+    // })
+    // svg.on("mouseup", () => {
+    //   isPainting = false;
+    // })
+    // svg.on('mousemove', (e) => {
+    //   if (!isPainting) {
+    //     return;
+    //   }
+    //   let g = d3.select('g')
+    //   let xy = d3.pointer(event, g.node());
+
+    //   g.append("circle")
+    //     .attr('class', 'mainRoomCircle')
+    //     .attr("r", 0.7)
+    //     .attr("cx", xy[0])
+    //     .attr("cy", xy[1])
+    //     .attr("fill", "white");
+    // })
+
     // REQUEST DATA
     if (router.isReady) {
       d3.json(`${!!id ? `http://localhost:3000/maps/${id}.geojson` :
@@ -93,7 +201,27 @@ const Room = () => {
           update(json);
         })
         .then(function () {
-          console.log(document.querySelector('svg'))
+          console.log('lol',document.querySelector('svg'))
+          
+          const svg = document.querySelector('svg>g');
+          const pathes = svg?.querySelectorAll('path');
+
+
+          pathes?.forEach((path, index) => {
+            path.setAttribute('id', index.toString());
+            const boundingBox = path.getBBox(); // Отримуємо обмежуючий прямокутник для кожного path
+            const pathData = {
+              id: index,
+              element: path, // Зберігаємо сам елемент path
+              x: boundingBox.x, // Координата x верхнього лівого кута
+              y: boundingBox.y, // Координата y верхнього лівого кута
+              width: boundingBox.width, // Ширина
+              height: boundingBox.height // Висота
+            };
+          
+            paths.push(pathData);
+
+          });
         });
     }
   }, [router.isReady])
@@ -105,24 +233,24 @@ const Room = () => {
       setUserData(session)
     })()
 
-  }, []);
+  }, [svg]);
 
-  (async function user() {
-    const body: any = JSON.stringify(userData?.user);
+  // (async function user() {
+  //   const body: any = JSON.stringify(userData?.user);
 
-    const res = await fetch('http://localhost:3000/api/auth/sign',
-      {
-        method: "POST",
-        body
-      })
-      .then(function (response) {
-        return response.json()
-      })
-      .then(function (json) {
-        setUser(json)
-        setUserData(json)
-      })
-  })()
+  //   const res = await fetch('http://localhost:3000/api/auth/sign',
+  //     {
+  //       method: "POST",
+  //       body
+  //     })
+  //     .then(function (response) {
+  //       return response.json()
+  //     })
+  //     .then(function (json) {
+  //       setUser(json)
+  //       setUserData(json)
+  //     })
+  // })()
 
   if (!!userData) {
     // console.log(userData)
